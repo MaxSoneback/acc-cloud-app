@@ -31,8 +31,8 @@ def remove_retweet(self, tweet):
     except KeyError:
         return tweet
 
-@app.task
-def map(tweet):
+@app.task(bind=True)
+def map(self, tweet):
     c = Counter()
     matches = re.findall(rf"{pattern}", tweet["text"])
     if matches:
@@ -42,6 +42,8 @@ def map(tweet):
             if match not in c:
                 c[match] = 0
             c[match] += 1
+    else:
+        self.request.chain = None
     return c
 
 @app.task

@@ -3,6 +3,8 @@ from cel import app
 from celery import group, chain
 import json
 from json import JSONDecodeError
+import re
+pattern = "(?<!\w)((?:[hH][aAoOeE][nN])|(?:[dD][Ee][tTnN])|(?:[Dd][Ee][Nn]{2}[AaEe]))(?!\w)"
 
 @app.task
 def extract_tweets(filepath):
@@ -31,11 +33,15 @@ def remove_retweet(self, tweet):
 
 @app.task
 def map(tweet):
-    counter = Counter()
-    for word in tweet:
-        if word not in c:
-            c[word] = 0
-            c[word] += 1
+    c = Counter()
+    matches = re.findall(rf"{pattern}", tweet["text"])
+    if matches:
+        #To count the total number of unique tweets, map the value 1 to the key "tweet" for each tweet
+        c["tweet"] = 1
+        for match in matches:
+            if match not in c:
+                c[match] = 0
+            c[match] += 1
     return c
 
 @app.task

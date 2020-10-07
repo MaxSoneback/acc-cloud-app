@@ -21,11 +21,13 @@ def validate_line(self, line):
         valid_json = json.loads(line)
         return valid_json
     except JSONDecodeError:
+        # Only keep valid tweets, i.e. not new-lines or broken json objects
         self.request.chain = None
 
 @app.task(bind=True)
 def remove_retweet(self, tweet):
     try:
+        #If key 'retweeted_status' exists, discard the tweet
         tweet["retweeted_status"]
         self.request.chain = None
     except KeyError:
@@ -39,9 +41,9 @@ def map(self, tweet):
         #To count the total number of unique tweets, map the value 1 to the key "tweet" for each tweet
         c["tweet"] = 1
         for match in matches:
-            if match not in c:
-                c[match] = 0
-            c[match] += 1
+            if match.lower() not in c:
+                c[match.lower()] = 0
+            c[match.lower()] += 1
     else:
         self.request.chain = None
     return c

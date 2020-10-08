@@ -1,1 +1,1 @@
-pkill -f "celery worker"
+pkill -f celery

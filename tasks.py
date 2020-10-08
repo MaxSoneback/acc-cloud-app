@@ -6,7 +6,7 @@ from json import JSONDecodeError
 import re
 pattern = "(?<!\w)((?:[hH][aAoOeE][nN])|(?:[dD][Ee][tTnN])|(?:[Dd][Ee][Nn]{2}[AaEe]))(?!\w)"
 
-@app.task
+@app.task(ignore_results=True)
 def extract_tweets(filepath):
     f = open(filepath, "r")
     chains = []
@@ -15,7 +15,7 @@ def extract_tweets(filepath):
         chains.append(tweet)
     return group(*chains)
 
-@app.task(bind=True)
+@app.task(bind=True, ignore_results=True)
 def validate_line(self, line):
     try:
         valid_json = json.loads(line)
@@ -24,7 +24,7 @@ def validate_line(self, line):
         # Only keep valid tweets, i.e. not new-lines or broken json objects
         self.request.chain = None
 
-@app.task(bind=True)
+@app.task(bind=True, ignore_results=True)
 def remove_retweet(self, tweet):
     try:
         #If key 'retweeted_status' exists, discard the tweet

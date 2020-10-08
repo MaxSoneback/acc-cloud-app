@@ -1,3 +1,4 @@
+import celery
 from celery import Celery, group, states
 from celery.backends.redis import RedisBackend
 

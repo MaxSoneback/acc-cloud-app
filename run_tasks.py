@@ -19,7 +19,7 @@ def extract_and_map_tweets(filepaths, num_of_files):
 filepath = './data/*'
 files = glob.glob(filepath)
 #Extract tweets from file and map them
-header = extract_and_map_tweets(files, 5)
+header = extract_and_map_tweets(files, 2)
 print('header created')
 #Reduce the mappings
 callback = tasks.reduce.s()

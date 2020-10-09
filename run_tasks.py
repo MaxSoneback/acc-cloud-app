@@ -16,12 +16,20 @@ def extract_and_map_tweets(filepaths, num_of_files):
     return group(*chains)
 
 #Create list of all filepaths
-filepath = './data/*'
-files = glob.glob(filepath)
+#filepath = './data/*'
+#files = glob.glob(filepath)
 #Extract tweets from file and map them
-header = extract_and_map_tweets(files, 2)
-print('header created')
+#header = extract_and_map_tweets(files, 2)
+#print('header created')
 #Reduce the mappings
+#callback = tasks.reduce.s()
+#results = (header | callback)()
+#print(results.get())
+glob_filepath = 'data/*'
+filepaths = glob.glob(glob_filepath)
+
+counters = group(tasks.count_in_file.s(filepath) for filepath in filepaths)
 callback = tasks.reduce.s()
-results = (header | callback)()
-print(results.get())
+
+result = (counters | callback)()
+print(result.get())

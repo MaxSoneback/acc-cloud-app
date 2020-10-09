@@ -1,1 +1,1 @@
-screen celery -A tasks worker --loglevel=INFO --concurrency=20
+screen celery -A tasks worker --loglevel=INFO --concurrency=10

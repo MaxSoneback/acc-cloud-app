@@ -1,1 +1,1 @@
-celery -A tasks purge -f
+celery -A app.client purge -f

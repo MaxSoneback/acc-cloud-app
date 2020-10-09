@@ -6,8 +6,3 @@ result_serializer = 'json'
 accept_content = ['json']
 timezone = 'Europe/Stockholm'
 enable_utc = True
-task_routes = {
-            'proj.tasks.validate_json': {'queue': 'celery', 'delivery_mode': 'transient'},
-            'proj.tasks.remove_retweet': {'queue': 'celery', 'delivery_mode': 'transient'},
-            'proj.tasks.map': {'queue': 'celery', 'delivery_mode': 'transient'}
-            }

@@ -1,5 +1,5 @@
 from collections import Counter
-from flask import celery
+from app import celery
 from celery import group
 import json
 from json import JSONDecodeError
